@@ -1,0 +1,63 @@
+\documentclass[a4paper,twoside]{article}
+\usepackage{z-eves}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2cm]{geometry}
+\usepackage{enumitem}
+\usepackage{ifthen}
+
+\newcommand{\desig}[2]{\item #1 $\approx #2$}
+\newenvironment{designations}
+  {\begin{leftbar}
+    \begin{list}{}{\setlength{\labelsep}{0cm}
+                   \setlength{\labelwidth}{0cm}
+                   \setlength{\listparindent}{0cm}
+                   \setlength{\rightmargin}{\leftmargin}}}
+  {\end{list}\end{leftbar}}
+
+  \newcommand{\setlog}{$\{log\}$\xspace}
+
+  \def\titlerunning{\setlog}
+  \def\authorrunning{F. Sansone}
+
+  \title{Trabajo Práctico para Ingeniería de Software}
+  \author{Franco Sansone}
+
+  \date{2018}
+
+  \begin{document}
+  \thispagestyle{empty}
+  \maketitle
+
+  \section{Requerimientos}
+  El usuario puede asociar un cliente (paciente si estuviese relacionado a la medicina) por nombre y DNI a un día y horario. Puede dar de baja un turno.
+
+  Se puede filtrar por fecha, nombre y DNI.
+
+  Podría ser usado por cualquiera que desarrolle sus actividades mediante turnos (médicos, docentes que den clases particulares, psicólogos, etc).
+
+  \section{Especificación}
+  Comenzamos dando algunas designaciones.
+
+  \begin{zed}
+  \desig{$n$ es un nombre}{n \in NAME}
+  \desig{$d$ es una fecha}{d \in DATE}
+  \desig{$k$ es el nombre de una persona cuyo cumplea�os hay registrar}{k \in known}
+  \desig{La fecha de cumplea�os de la persona $k$}{birthday~k}
+  \end{zed}
+
+  Entonces introducimos los siguientes tipos básicos.
+
+  \begin{zed}
+  [NAME,DATE]
+  \end{zed}
+
+  Ahora podemos definir el espacio de estados de la especificación de la siguiente forma.
+
+  \begin{schema}{BirthdayBook}
+  known: \power NAME \\
+  birthday: NAME \pfun DATE
+  \end{schema}
+
+
+
+\end{document}
