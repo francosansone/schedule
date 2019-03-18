@@ -1,9 +1,16 @@
-\documentclass[a4paper,twoside]{article}
+\documentclass[%
+  fleqn,colorlinks,linkcolor=blue,citecolor=blue,urlcolor=blue]{eptcs}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{z-eves}
-\usepackage[utf8]{inputenc}
-\usepackage[margin=2cm]{geometry}
-\usepackage{enumitem}
-\usepackage{ifthen}
+\usepackage{framed}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{xspace}
 
 \newcommand{\desig}[2]{\item #1 $\approx #2$}
 \newenvironment{designations}
@@ -19,45 +26,76 @@
   \def\titlerunning{\setlog}
   \def\authorrunning{F. Sansone}
 
-  \title{Trabajo Práctico para Ingeniería de Software}
+  \title{Trabajo Pr\'actico para Ingenier\'i{}a de Software}
   \author{Franco Sansone}
 
-  \date{2018}
+  \date{2019}
 
   \begin{document}
   \thispagestyle{empty}
   \maketitle
 
   \section{Requerimientos}
-  El usuario puede asociar un cliente (paciente si estuviese relacionado a la medicina) por nombre y DNI a un día y horario. Puede dar de baja un turno.
+  El usuario puede asociar un cliente (paciente si estuviese relacionado a la medicina) por nombre y DNI a un d\'i{}a y horario. Puede dar de baja un turno.
 
   Se puede filtrar por fecha, nombre y DNI.
 
-  Podría ser usado por cualquiera que desarrolle sus actividades mediante turnos (médicos, docentes que den clases particulares, psicólogos, etc).
+  Podr\'i{}a ser usado por cualquiera que desarrolle sus actividades mediante turnos (m\'edicos, docentes que den clases particulares, psic\'ologos, etc).
 
-  \section{Especificación}
-  Comenzamos dando algunas designaciones.
+  \section{Especificaci\'on}
+  Designaciones.
 
-  \begin{zed}
+  \begin{designations}
+  \desig{$d$ es un DNI}{d \in DNI}
   \desig{$n$ es un nombre}{n \in NAME}
-  \desig{$d$ es una fecha}{d \in DATE}
-  \desig{$k$ es el nombre de una persona cuyo cumplea�os hay registrar}{k \in known}
-  \desig{La fecha de cumplea�os de la persona $k$}{birthday~k}
-  \end{zed}
+  \desig{$f$ es una fecha y hora}{f \in DATETIME}
+  \desig{El nombre de la persona con DNI $k$}{clientes~k}
+  \desig{La fecha y hora del turno de la persona con DNI $k$}{turnos~k}
+  \end{designations}
 
-  Entonces introducimos los siguientes tipos básicos.
+  Entonces introducimos los siguientes tipos b\'asicos.
 
   \begin{zed}
-  [NAME,DATE]
+  [DNI,NOMBRE,DATETIME]
   \end{zed}
 
-  Ahora podemos definir el espacio de estados de la especificación de la siguiente forma.
+  Ahora podemos definir el espacio de estados de la especificaci\'on de la siguiente forma.
 
-  \begin{schema}{BirthdayBook}
-  known: \power NAME \\
-  birthday: NAME \pfun DATE
+  \begin{schema}{AgendaDeTurnos}
+  clientes: DNI \pfun NOMBRE \\
+  turnos: DATETIME \pfun DNI
   \end{schema}
 
+  El estado inicial de la agenda de turnos es el siguiente.
 
+  \begin{schema}{AgendaDeTurnosInit}
+  AgendaDeTurnos
+  \where
+  clientes = \emptyset \\
+  turnos = \emptyset
+  \end{schema}
+
+  Primero modelo el esquema que describe los predicados que deber\'i{}an ser invariantes de estado.
+
+  \begin{schema}{AgendaDeTurnosInv}
+  AgendaDeTurnos
+  \where
+  \dom clientes = \dom turnos
+  \end{schema}
+
+  Avanzo con la primera operaci\'on: asignar un turno.
+
+  \begin{schema}{AsignarTurnoPrimeraVez}
+  \Delta AgendaDeTurnos \\
+  nombre?:NAME \\
+  dni?:DNI \\
+  fecha?:DATETIME \\
+  ahora?:DATETIME \\
+  \where
+  dni? \notin \dom clientes \\
+  fecha?>ahora? \\
+  clientes' = clientes \cup \{dni? \mapsto name?\} \\
+  turnos' = turnos \oplus \{fecha? \mapsto dni?\} \\
+  \end{schema}
 
 \end{document}
