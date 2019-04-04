@@ -188,6 +188,83 @@
   resp! = turnos \rres dia?
   \end{schema}
 
+\section{Simulaciones}
 
+La primera simulaci\'on es la siguiente:
 
+\begin{verbatim}
+agendaDeTurnosInit(S0) &
+asignarTurno(S0,'Franco',37449292,201904011900,201903301900,S1) &
+asignarTurno(S1,'Oscar',22099399,201904051730,201903301901,S2) &
+asignarTurno(S2,'',22099399,201904011900,201903301903,S3) &
+busquedaPorDni(S3,37449292,R1,S4) & busquedaPorNombre(S4,'Oscar',R2,S5).
+\end{verbatim}
+cuyo primer resultado es:
+\begin{verbatim}
+S0 = {[clientes,{}],[turnos,{}]},
+S1 = {[clientes,{[37449292,Franco]}],[turnos,{[201904011900,37449292]}]},
+S2 = {[clientes,{[37449292,Franco],[22099399,Oscar]}],
+  [turnos,{[201904011900,37449292],[201904051730,22099399]}]},
+S3 = {[clientes,{[37449292,Franco],[22099399,Oscar]}],
+  [turnos,{[201904011900,37449292],[201904051730,22099399]}]},
+S4 = {[clientes,{[37449292,Franco],[22099399,Oscar]}],
+  [turnos,{[201904011900,37449292],[201904051730,22099399]}]},
+S5 = {[clientes,{[37449292,Franco],[22099399,Oscar]}],
+  [turnos,{[201904011900,37449292],[201904051730,22099399]}]},
+S6 = {[clientes,{[37449292,Franco],[22099399,Oscar]}],
+  [turnos,{[201904011900,37449292],[201904051730,22099399]}]}
+R1 = {201904011900},
+R2 = {[201904051730,22099399]},
+R3 = {[201904011900,37449292]},
+\end{verbatim}
+
+Esta es la segunda simulaci\'on:
+
+\begin{verbatim}
+S0={[turnos,
+  { [201904011900,37449292],
+    [201904011920, 33456787],
+    [201904011940, 32890789],
+    [201904031900,11235678]
+  }],
+  { [37449292,'Franco'],
+    [33456787,'Ramiro'],
+    [11235678,'Florencia']
+}} &
+busquedaPorFecha(S0,{201904011900,201904011920,201904011940},R,S1).
+\end{verbatim}
+
+cuya ejecuci\'on devolvi\'o:
+
+\begin{verbatim}
+S0 = {[turnos,
+  {[201904011900,37449292],
+  [201904011920,33456787],
+  [201904011940,32890789],
+  [201904031900,11235678]}],
+  {[37449292,Franco],[33456787,Ramiro],[11235678,Florencia]}},
+R = {[201904011900,37449292],[201904011920,33456787],[201904011940,32890789]},
+S1 = {[turnos,{[201904011900,37449292],[201904011920,33456787],
+[201904011940,32890789],[201904031900,11235678]}],
+{[37449292,Franco],[33456787,Ramiro],[11235678,Florencia]}}
+\end{verbatim}
+
+\section{Demostraciones con \setlog}
+
+\paragraph{Primera demostraci\'on con \setlog.}
+
+Demuestro que $AsignarTurno$ preserva el invariante $AgendaDeTurnosInv$, o sea el siguiente teorema:
+\begin{theorem}{AsignarTurnoPI}
+AgendaDeTurnosInv \land AsignarTurno \implies AgendaDeTurnosInv'
+\end{theorem}
+el cual en \setlog se escribe de la siguiente forma:
+\begin{verbatim}
+S = {[clientes,C],[turnos,T]} &
+S_ = {[clientes,C_],[turnos,T_]} &
+ran(T,It) &
+dom(C, It) &
+asignarTurno(S,B,K,M,H,S_) &
+ran(T_,It_) &
+ndom(C_,It_).
+\end{verbatim}
 \end{document}
