@@ -143,7 +143,7 @@
   \begin{schema}{BusquedaPorDNIOk}
   \Xi AgendaDeTurnos \\
   dni?:DNI \\
-  resp!:DATETIME \\
+  resp!:\power DATETIME \\
   \where
   dni? \in \dom clientes \\
   resp! = \dom(turnos \dres \{dni?\})
@@ -163,17 +163,17 @@
   \begin{schema}{BusquedaPorNombreOk}
   \Xi AgendaDeTurnos \\
   nombre?:NOMBRE \\
-  resp! = DATETIME \pfun DNI \\
+  resp!: DATETIME \pfun DNI \\
   \where
-  nombre? \in \Ima clientes \\
-  resp! = turnos \dres \dom (clientes \dres \{nombre?\})
+  nombre? \in \ran clientes \\
+  resp! = turnos \rres (\dom (clientes \rres \{nombre?\}))
   \end{schema}
 
   \begin{schema}{ClienteNoExisteNombre}
   \Xi AgendaDeTurnos \\
   nombre?:NOMBRE \\
   \where
-  nombre \notin \Ima clientes
+  nombre? \notin \Ima clientes
   \end{schema}
 
   \begin{zed}
@@ -185,7 +185,7 @@
   dia?:\power DATETIME \\
   resp!:DATETIME \pfun DNI
   \where
-  resp! = turnos \rres dia?
+  resp! = dia? \dres turnos
   \end{schema}
 
 \section{Simulaciones}
@@ -267,4 +267,47 @@ asignarTurno(S,B,K,M,H,S_) &
 ran(T_,It_) &
 ndom(C_,It_).
 \end{verbatim}
+
+\paragraph{Segunda demostraci\'on con \setlog.}
+Demuestro que $AsignarTurno$ preserva el invariante $turnos \in DATETIME \pfun DNI$, o sea el teorema:
+\begin{theorem}{TurnosIsPfun}
+turnos \in  DATETIME \pfun DNI \land AsignarTurno \implies turnos' \in DATETIME \pfun DNI
+\end{theorem}
+el cual en \setlog se escribe de la siguiente forma:
+\begin{verbatim}
+S = {[turnos,T],[clientes,C]} &
+S_ = {[turnos,T_],[clientes,C_]} &
+pfun(T) &
+asignarTurno(S,F,J,M,K,S_) &
+npfun(T_).
+\end{verbatim}
+
+\section{Demostraci\'on con Z/EVES}
+Para esta prueba sustitu\'i{} la precondici\'on de $dni? \in \dom clientes$
+por $(dni? \mapsto nombre?) \in clientes$ en $AsignarTurnoCliente$ (obviamente,
+agregando $nombre? \in NOMBRE$ como par\'ametro de entrada).
+
+% read "/home/fsansone/ingenieria/schedule/zeves.tex";
+
+\begin{theorem}{AsignarTurnoPI}
+AgendaDeTurnosInv \land AsignarTurno \implies AsignarTurnoPI'
+\end{theorem}
+
+\begin{zproof}[AsignarTurnoPI]
+invoke AsignarTurno;
+split AsignarTurnoOk;
+split AsignarTurnoPrimeraVez;
+cases;
+prove by reduce;
+next;
+split AsignarTurnoCliente;
+cases;
+prove by reduce;
+next;
+prove by reduce;
+next;
+\end{zproof}
+
+\section{Casos de prueba}
+
 \end{document}
