@@ -309,5 +309,123 @@ next;
 \end{zproof}
 
 \section{Casos de prueba}
+El script que us\'e para generar casos de prueba con Fastest es el siguiente:
+\begin{verbatim}
+loadspec /home/fsansone/ingenieria/fastest.tex
+selop AsignarTurno
+genalltt
+addtactic AsignarTurno_DNF_2 SP \cup clientes \cup \{dni? \mapsto nombre?\}
+addtactic AsignarTurno_DNF_2 SP \cup turnos \cup \{fecha? \mapsto dni?\}
+addtactic AsignarTurno_DNF_1 SP \cup turnos \cup \{fecha? \mapsto dni?\}
+genalltt
+genalltca
+\end{verbatim}
+Los casos de prueba generados por Fastest son los siguientes:
+
+\begin{schema}{AsignarTurno\_ SP\_ 74\_ TCASE}\\
+ clientes : DNI \pfun NOMBRE \\
+ turnos : DATETIME \pfun DNI \\
+ dni? : DNI \\
+ fecha? : DATETIME \\
+ ahora? : DATETIME \\
+ nombre? : NOMBRE
+\where
+ dni? \in \dom clientes \\
+ fecha? \notin \dom turnos \\
+ fecha? > ahora? \\
+ turnos = \{ \} \\
+ \{ fecha? \mapsto dni? \} \neq \{ \} \\
+ nombre? = nombre1 \\
+ turnos =~\emptyset \\
+ dni? = dni1 \\
+ clientes = \{ ( dni1 , nombre1 ) \} \\
+ ahora? = 0 \\
+ fecha? = 1
+\end{schema}
+
+
+\begin{schema}{AsignarTurno\_ SP\_ 18\_ TCASE}\\
+ clientes : DNI \pfun NOMBRE \\
+ turnos : DATETIME \pfun DNI \\
+ dni? : DNI \\
+ fecha? : DATETIME \\
+ ahora? : DATETIME \\
+ nombre? : NOMBRE
+\where
+ dni? \notin \dom clientes \\
+ fecha? \notin \dom turnos \\
+ fecha? > ahora? \\
+ clientes = \{ \} \\
+ \{ dni? \mapsto nombre? \} \neq \{ \} \\
+ turnos = \{ \} \\
+ \{ fecha? \mapsto dni? \} \neq \{ \} \\
+ nombre? = nombre1 \\
+ turnos =~\emptyset \\
+ dni? = dni1 \\
+ clientes =~\emptyset \\
+ ahora? = 0 \\
+ fecha? = 1
+\end{schema}
+
+
+\begin{schema}{AsignarTurno\_ SP\_ 34\_ TCASE}\\
+ clientes : DNI \pfun NOMBRE \\
+ turnos : DATETIME \pfun DNI \\
+ dni? : DNI \\
+ fecha? : DATETIME \\
+ ahora? : DATETIME \\
+ nombre? : NOMBRE
+\where
+ dni? \notin \dom clientes \\
+ fecha? \notin \dom turnos \\
+ fecha? > ahora? \\
+ clientes \neq \{ \} \\
+ \{ dni? \mapsto nombre? \} \neq \{ \} \\
+ clientes \cap \{ dni? \mapsto nombre? \} = \{ \} \\
+ turnos = \{ \} \\
+ \{ fecha? \mapsto dni? \} \neq \{ \} \\
+ nombre? = nombre1 \\
+ turnos =~\emptyset \\
+ dni? = dni1 \\
+ clientes = \{ ( dni0 , nombre1 ) \} \\
+ ahora? = 0 \\
+ fecha? = 1
+\end{schema}
+
+
+\begin{schema}{AsignarTurno\_ DNF\_ 3\_ TCASE}\\
+ clientes : DNI \pfun NOMBRE \\
+ turnos : DATETIME \pfun DNI \\
+ dni? : DNI \\
+ fecha? : DATETIME \\
+ ahora? : DATETIME \\
+ nombre? : NOMBRE
+\where
+ fecha? \leq ahora? \\
+ nombre? = nombre1 \\
+ turnos =~\emptyset \\
+ dni? = dni1 \\
+ clientes =~\emptyset \\
+ ahora? = 0 \\
+ fecha? = 0
+\end{schema}
+
+
+\begin{schema}{AsignarTurno\_ DNF\_ 4\_ TCASE}\\
+ clientes : DNI \pfun NOMBRE \\
+ turnos : DATETIME \pfun DNI \\
+ dni? : DNI \\
+ fecha? : DATETIME \\
+ ahora? : DATETIME \\
+ nombre? : NOMBRE
+\where
+ fecha? \in \dom turnos \\
+ nombre? = nombre1 \\
+ turnos = \{ ( 0 , dni1 ) \} \\
+ dni? = dni1 \\
+ clientes =~\emptyset \\
+ ahora? = 0 \\
+ fecha? = 0
+\end{schema}
 
 \end{document}
